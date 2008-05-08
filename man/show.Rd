@@ -1,0 +1,12 @@
+\name{show}
+\title{Show...}
+\description{Show}
+\details{Show method for nFit
+
+Show some basic information for an nFit model}
+\value{prints some basic information}
+\alias{show,nFit-method}
+\author{Henning Redestig \code{henning@psc.riken.jp}}
+\arguments{\item{object}{the \code{nFit} object}}
+\examples{data(mix)
+normFit(mix, "avg")}

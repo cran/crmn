@@ -1,0 +1,14 @@
+\name{pcaMuffle}
+\alias{pcaMuffle}
+\title{Muffle...}
+\usage{pcaMuffle(w)}
+\description{Muffle}
+\details{Muffle the pca function
+
+PCA and Q2 issues warnings about biasedness and poorly estimated
+PCs. The first is non-informative and the poorly estimated PCs will
+show up as poor overfitting which leads to a choice of fewer PCs
+i.e. not a problem. This function is mean to muffle those warnings.}
+\value{nothing}
+\author{Henning Redestig \code{henning@psc.riken.jp}}
+\arguments{\item{w}{a warning}}

@@ -1,0 +1,36 @@
+\name{standardsFit}
+\alias{standardsFit}
+\title{Standards model...}
+\usage{standardsFit(object, factors, ncomp, lg=TRUE, fitfunc=lm, ...)}
+\description{Standards model}
+\details{Fit a model which describes the variation of the labeled internal
+standards from the biological factors.
+
+There is often unwanted variation in among the labeled internal
+standards which is related to the experimental factors due to
+overlapping peaks etc. This function fits a model that describes
+that overlapping variation using a scaled and centered PCA / multiple linear
+regression model.}
+\value{a list containing the PCA/MLR model, the recommended number of
+components for that model, the standard deviations and mean values
+and Q2/R2 for the fit.}
+\seealso{\code{makeX}, \code{standardsPred}}
+\author{Henning Redestig \code{henning@psc.riken.jp}}
+\arguments{\item{object}{an \code{ExpressionSet} or a \code{matrix}.
+Note that if you pass a\code{matrix} have to specify the identity of
+the standards by
+passing the appropriate argument to \code{standards}.}
+\item{factors}{the biological factors described in the pheno data slot}
+\item{ncomp}{number of PCA components to use.
+Determined by cross-validation if left \code{NULL}}
+\item{lg}{logical indicating that the data should be log transformed}
+\item{fitfunc}{the function that creates the model fit for normalization, must use the same interfaces as \code{lm}.}
+\item{...}{passed on to \code{Q2}, \code{standards} and \code{analytes}}}
+\examples{data(mix)
+sfit <- standardsFit(mix, "type", ncomp=3)
+slplot(sfit$fit$pc)
+## same thing
+Y <- exprs(mix)
+G <- model.matrix(~-1+mix$type)
+isIS <- fData(mix)$tag == 'IS'
+sfit <- standardsFit(Y, G, standards=isIS, ncomp=3)}
