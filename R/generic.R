@@ -13,7 +13,7 @@ setGeneric("method", function(object, ...)
 ##' @param object an \code{nFit} object
 ##' @param ... not used
 ##' @return the model (content differs between normlization models)
-##' @author Henning Redestig \email{henning@@psc.riken.jp}
+##' @author Henning Redestig
 ##' @aliases model model,nFit-method
 ##' @exportMethod model
 setMethod("model", signature(object="nFit"), function(object) object@model)
@@ -25,7 +25,7 @@ setMethod("model", signature(object="nFit"), function(object) object@model)
 ##' @param object an \code{nFit} object
 ##' @param ... not used
 ##' @return the method (content differs between normlization methods)
-##' @author Henning Redestig \email{henning@@psc.riken.jp}
+##' @author Henning Redestig
 ##' @aliases method method,nFit-method
 ##' @importFrom pcaMethods,method
 ##' @exportMethod method
@@ -41,7 +41,7 @@ setGeneric("sFit", function(object, ...)
 ##' @param object an \code{nFit} object
 ##' @param ... not used
 ##' @return the sFit is only defined for CRMN
-##' @author Henning Redestig \email{henning@@psc.riken.jp}
+##' @author Henning Redestig
 ##' @aliases sFit sFit,nFit-method
 ##' @exportMethod sFit
 setMethod("sFit", signature(object="nFit"), function(object) object@sFit)
@@ -63,13 +63,13 @@ setMethod("standards", signature(object="matrix",
 ##' @param standards a logical vector indicating which rows are internal standards
 ##' @param ... not used
 ##' @return subsetted dataset
-##' @author Henning Redestig \email{henning@@psc.riken.jp}
 ##' @aliases standards 
 ##' @exportMethod standards
 ##' @examples
 ##' data(mix)
 ##' standards(mix)
 ##' standards(exprs(mix), fData(mix)$tag == 'IS')
+##' @author Henning Redestig
 setMethod("standards", signature(object="data.frame",
                                  standards="logical"), standards_other)
 
@@ -90,7 +90,7 @@ setMethod("analytes", signature(object="matrix",
 ##' @param standards a logical vector indicating which rows are internal analytes
 ##' @param ... not used
 ##' @return subsetted dataset
-##' @author Henning Redestig \email{henning@@psc.riken.jp}
+##' @author Henning Redestig
 ##' @aliases analytes 
 ##' @exportMethod analytes
 ##' @examples
@@ -121,7 +121,7 @@ setMethod("makeX", signature(object="ExpressionSet",
 ##' @return a design matrix
 ##' @exportMethod makeX
 ##' @aliases makeX 
-##' @author Henning Redestig \code{henning@@psc.riken.jp}
+##' @author Henning Redestig
 ##' @examples
 ##' data(mix)
 ##' makeX(mix, "runorder")
@@ -145,7 +145,7 @@ setMethod("mexprs", "ExpressionSet", function(object) exprs(object))
 ##' @return the expression data
 ##' @exportMethod mexprs
 ##' @aliases mexprs mexprs,ExpressionSet-method mexprs,matrix-method
-##' @author Henning Redestig \code{henning@@psc.riken.jp}
+##' @author Henning Redestig
 ##' @examples
 ##' data(mix)
 ##' head(mexprs(mix))
@@ -156,6 +156,7 @@ setMethod("mexprs", "matrix", function(object) object)
 ##' Matrix safe setter of expression slot
 ##'
 ##' Accessor. Internal convenience function.
+##' @title Get the expression slot
 ##' @name mexprs_bla
 setGeneric("mexprs<-", function(object, value)
            standardGeneric("mexprs<-"))
@@ -178,7 +179,7 @@ setReplaceMethod("mexprs", signature("ExpressionSet","matrix"),
 ##' @exportMethod "mexprs<-"
 ##' @aliases mexprs<- mexprs<-,ExpressionSet,matrix-method
 ##'   mexprs<-,matrix,matrix-method
-##' @author Henning Redestig \code{henning@@psc.riken.jp}
+##' @author Henning Redestig
 ##' @examples
 ##' data(mix)
 ##' test <- mix
@@ -197,7 +198,7 @@ setReplaceMethod("mexprs", signature("matrix","matrix"),function(object, value) 
 ##' @return prints some basic information
 ##' @aliases show,nFit-method
 ##' @exportMethod show
-##' @author Henning Redestig \code{henning@@psc.riken.jp}
+##' @author Henning Redestig
 ##' @examples
 ##' data(mix)
 ##' normFit(mix, "avg")

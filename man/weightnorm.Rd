@@ -8,7 +8,7 @@ weight argument is takes from the pheno data (or given as numerical
 vector with one value per sample). Missing values are not
 tolerated.}
 \value{the normalized expression set}
-\author{Henning Redestig \code{henning@psc.riken.jp}}
+\author{Henning Redestig}
 \arguments{\item{object}{an \code{ExpressionSet}}
 \item{weight}{a string naming the pheno data column with the weight
 or a numeric vector with one weight value per sample.}

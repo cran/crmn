@@ -1,2 +1,19 @@
+# -*- org -*-
+
+* Version 0.0.14 
+- Changed the warning about imputing missing values to a message
+  instead as imputation not necessarily is anything that needs the
+  user's attention.
+- More adaptations for using both pcaMethods 1.24.0 and 1.27.2
+- The column name in fData and what it should equal for ISs can now be
+  set the user. Request by Pernilla Lindén.
+* Version 0.0.12 <2010-01-08 Fri>
+- Bugfixes and adapations to make crmn work with pre 1.26.0 versions
+  of pcaMethods.
 * Version 0.0.10 <2010-01-04 Mon>
-The pcaMethods package now contain Krzanowski style cross-validation which yields more stable results and crmn now use this CV by default.
+- The pcaMethods package now contain Krzanowski style cross-validation
+  which yields more stable results and crmn now use this CV by
+  default.
+* Issues
+- Printing nFit does not show the pcaRes correctly. Wrong printing
+  method gets called.

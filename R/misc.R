@@ -4,7 +4,7 @@
 ##' @param object the \code{nFit} object
 ##' @return prints some basic information
 ##' @aliases show_nfit
-##' @author Henning Redestig \code{henning@@psc.riken.jp}
+##' @author Henning Redestig
 show_nfit <- function(object) {
   cat(method(object), "normalization model\n")
   cat("========================\n")
@@ -20,7 +20,8 @@ show_nfit <- function(object) {
   if(method(object) %in% c("crmn", "nomis")) {
     cat("R2 from Tz to analytes:\n")
     cat("-----------------------\n")
-    print(sum(fitted(model(object)$fit)^2) / sum(residuals(model(object)$fit)^2))
+    print(1 - sum(residuals(model(object)$fit)^2) /
+          (sum(fitted(model(object)$fit)^2) + sum(residuals(model(object)$fit)^2)))
   }
 }
 
@@ -32,12 +33,12 @@ show_nfit <- function(object) {
 ##' @param y not used
 ##' @param ... passed on to the scatter plot calls
 ##' @return nothing
-##' @author Henning Redestig \email{henning@@psc.riken.jp}
-##' @export
 ##' @examples
 ##' data(mix)
 ##' nfit <- normFit(mix, "crmn", factors="type", ncomp=2)
 ##' plot(nfit)
+##' @export
+##' @author Henning Redestig
 plot.nFit <- function(x, y=NULL,...) {
   if(!method(x) == "crmn")
     stop("Can only plot CRMN normalization models")
@@ -61,24 +62,28 @@ plot.nFit <- function(x, y=NULL,...) {
 
 }
 
-
 ##' Subset an data set to only contain the labeled internal standards.
 ##'
 ##' @title Accessor for the Internal Standards
 ##' @param object an \code{ExpressionSet}
+##' @param where Column index or name in fData which equals
+##' \code{what} for the ISs
+##' @param what What the column \code{where} equals for ISs
 ##' @param ... not used
 ##' @return subsetted dataset
-##' @author Henning Redestig \email{henning@@psc.riken.jp}
 ##' @aliases standards_eset standards,ExpressionSet,missing-method 
 ##' @examples
 ##' data(mix)
 ##' standards(mix)
-standards_eset <- function(object, ...) {
-  if(is.null(fData(object)$tag))
-    stop("No column named 'tag' in the feature data")
-  if(all(!fData(object)$tag %in% "IS"))
-    stop("No rows tagged as 'IS'")
-  object[fData(object)$tag %in% "IS",]
+##' fData(mix)$test <- fData(mix)$tag
+##' standards(mix, where="test")
+##' @author Henning Redestig
+standards_eset <- function(object, where="tag", what="IS",...) {
+  if(is.null(fData(object)[,where]))
+    stop(paste("No column named", where, "in the feature data"))
+  if(all(!fData(object)[,where] %in% what))
+    stop(paste("No rows tagged as", what))
+  object[fData(object)[,where] %in% what,]
 }
 
 ##' Subset an data set to only contain the labeled internal standards.
@@ -88,11 +93,12 @@ standards_eset <- function(object, ...) {
 ##' @param standards a logical vector indicating which rows are internal standards
 ##' @param ... not used
 ##' @return subsetted dataset
-##' @author Henning Redestig \email{henning@@psc.riken.jp}
-##' @aliases standards_other standards,matrix,logical-method standards,data.frame,logical-method 
+##' @aliases standards_other standards,matrix,logical-method
+##' standards,data.frame,logical-method 
 ##' @examples
 ##' data(mix)
 ##' standards(exprs(mix), fData(mix)$tag == 'IS')
+##' @author Henning Redestig
 standards_other <- function(object, standards, ...) {
   if(all(!standards))
     stop("No standards")
@@ -103,20 +109,25 @@ standards_other <- function(object, standards, ...) {
 ##'
 ##' @title Accessor for the analytes
 ##' @param object an \code{ExpressionSet}
+##' @param where Column index or name of fData which equals
+##' \code{what} for the ISs (and something else for the analytes)
+##' @param what What the column \code{where} does not equal for
+##' analytes. Can be vector values too.
 ##' @param ... not used
 ##' @aliases analytes_eset analytes,ExpressionSet,missing-method 
 ##' @return \code{ExpressionSet}
-##' @author Henning Redestig \email{henning@@psc.riken.jp}
-##' @export
 ##' @examples
 ##' data(mix)
 ##' analytes(mix)
-analytes_eset<- function(object, ...) {
-  if(is.null(fData(object)$tag))
-    stop("No column named 'tag' in the feature data")
-  chosen <- !fData(object)$tag %in% "IS"
+##' fData(mix)$test <- fData(mix)$tag
+##' analytes(mix, where="test")
+##' @author Henning Redestig 
+analytes_eset<- function(object, where="tag", what="IS", ...) {
+  if(is.null(fData(object)[,where]))
+    stop(paste("No column named", where, "in the feature data"))
+  chosen <- !fData(object)[,where] %in% what
   if(all(!chosen))
-    stop("All rows tagged are tagged IS")
+    stop(paste("All rows are tagged as", what))
   object[chosen,]
 }
 
@@ -124,15 +135,16 @@ analytes_eset<- function(object, ...) {
 ##'
 ##' @title Accessor for the analytes
 ##' @param object an \code{ExpressionSet}
-##' @param standards a logical vector indicating which rows are internal standards
+##' @param standards a logical vector indicating which rows are
+##' internal standards
 ##' @param ... not used
-##' @aliases analytes_other analytes,matrix,logical-method analytes,data.frame,logical-method 
+##' @aliases analytes_other analytes,matrix,logical-method
+##' analytes,data.frame,logical-method 
 ##' @return \code{ExpressionSet}
-##' @author Henning Redestig \email{henning@@psc.riken.jp}
-##' @export
 ##' @examples
 ##' data(mix)
 ##' analytes(exprs(mix), fData(mix)$tag == 'IS')
+##' @author Henning Redestig
 analytes_other<- function(object, standards, ...)
   object[!standards,,drop=FALSE]
 
@@ -140,19 +152,18 @@ analytes_other<- function(object, standards, ...)
 ##'
 ##' Make a design matrix from the pheno data slot of an expression
 ##' set, taking care that factors and numerical are handled
-##' properly. No interactions are included and formula is the most
+##' properly. No interactions are included and the formula is the most
 ##' simple possible, i.e. \code{y~-1+term1+term2+...}
 ##' @title Make X
 ##' @param object an \code{ExpressionSet}
 ##' @param factors column names from the pheno data of \code{object}
 ##' @param ... not used
 ##' @return a design matrix
-##' @export
 ##' @aliases makeX_eset makeX,ExpressionSet,character-method
-##' @author Henning Redestig \code{henning@@psc.riken.jp}
 ##' @examples
 ##' data(mix)
 ##' makeX(mix, "runorder")
+##' @author Henning Redestig
 makeX_eset <- function(object, factors, ...) {
   x <- pData(object)[,factors,drop=FALSE]
   ## construct a Y matrix (the experiment related information)
@@ -170,18 +181,16 @@ makeX_eset <- function(object, factors, ...) {
 ##' Construct a design matrix 
 ##'
 ##' Convenience function that just return the given design matrix. 
-##'
 ##' @title Make X
 ##' @param object, not used
 ##' @param factors a design matrix
 ##' @param ... not used
 ##' @return the same design matrix
 ##' @aliases makeX_other makeX,ANY,matrix-method
-##' @export
-##' @author Henning Redestig \code{henning@@psc.riken.jp}
 ##' @examples
 ##' data(mix)
 ##' makeX(mix, model.matrix(~pData(mix)[,"runorder"]))
+##' @author Henning Redestig
 makeX_other <- function(object, factors, ...)
   factors
 
@@ -189,11 +198,11 @@ makeX_other <- function(object, factors, ...)
 ##'
 ##' @title Drop unused levels
 ##' @param x the data frame
-##' @author Henning Redestig \code{henning@@psc.riken.jp}
-##' @export
+##' @author Henning Redestig
 ##' @examples
 ##' iris[1:10,]$Species
 ##' dropunusedlevels(iris[1:10,])$Species
+##' @export
 dropunusedlevels <- function (x)  {
     if (!is.data.frame(x)) 
         stop("only data frames")

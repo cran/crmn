@@ -7,7 +7,7 @@ just return the given matrix}
 \alias{mexprs}
 \alias{mexprs,ExpressionSet-method}
 \alias{mexprs,matrix-method}
-\author{Henning Redestig \code{henning@psc.riken.jp}}
+\author{Henning Redestig}
 \arguments{\item{object}{an \code{ExpressionSet} or \code{matrix}}}
 \examples{data(mix)
 head(mexprs(mix))

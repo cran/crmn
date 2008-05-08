@@ -9,7 +9,7 @@ anything as object in which case \code{factor} must be a design matrix.
 It that case the same design matrix is returned.}
 \value{a design matrix}
 \alias{makeX}
-\author{Henning Redestig \code{henning@psc.riken.jp}}
+\author{Henning Redestig}
 \arguments{\item{object}{an \code{ExpressionSet}}
 \item{factors}{column names from the pheno data of \code{object}
 or a design matrix}}

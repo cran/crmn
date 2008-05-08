@@ -16,4 +16,4 @@ normalize metabolomics data. Do \code{openVignette("crmn")} to see
 the manual.}
 \alias{crmn}
 \docType{package}
-\author{Henning Redestig \email{henning@psc.riken.jp}}
+\author{Henning Redestig}

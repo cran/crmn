@@ -6,7 +6,7 @@
 Input concentrations are known and given in the original publication.}
 \alias{mix}
 \docType{data}
-\author{Henning Redestig \email{henning@psc.riken.jp}}
+\author{Henning Redestig}
 \examples{data(mix)
 fData(mix)
 exprs(mix)

@@ -6,7 +6,8 @@
     (LaTeX-add-labels
      "fig:tz"
      "fig:plot"
-     "fig:compare")
+     "fig:compare"
+     "sec:matrix")
     (TeX-run-style-hooks
      "hyperref"
      "latex2e"

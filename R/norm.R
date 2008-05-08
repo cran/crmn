@@ -12,8 +12,8 @@
 ##'   the standards by
 ##'   passing the appropriate argument to \code{standards}.
 ##' @param factors the biological factors described in the pheno data slot
-##    if \code{object} is an \code{ExpressionSet} or a design matrix if
-##    \code{object} is a \code{matrix}.
+##' if \code{object} is an \code{ExpressionSet} or a design matrix if
+##'    \code{object} is a \code{matrix}.
 ##' @param ncomp number of PCA components to use.
 ##'   Determined by cross-validation if left \code{NULL}
 ##' @param lg logical indicating that the data should be log transformed 
@@ -24,7 +24,7 @@
 ##' and Q2/R2 for the fit.
 ##' @export
 ##' @seealso \code{makeX}, \code{standardsPred}
-##' @author Henning Redestig \code{henning@@psc.riken.jp}
+##' @author Henning Redestig
 ##' @examples
 ##' data(mix)
 ##' sfit <- standardsFit(mix, "type", ncomp=3)
@@ -75,7 +75,7 @@ standardsFit <- function(object, factors, ncomp=NULL, lg=TRUE, fitfunc=lm, ...) 
 ##' @title Muffle the pca function
 ##' @param w a warning
 ##' @return nothing
-##' @author Henning Redestig \code{henning@@psc.riken.jp}
+##' @author Henning Redestig
 pcaMuffle <- function(w) if(any(grepl("Precision for components", w),
                                 grepl("Validation incomplete", w)))
   invokeRestart( "muffleWarning" )
@@ -97,7 +97,7 @@ pcaMuffle <- function(w) if(any(grepl("Precision for components", w),
 ##' @return the corrected data
 ##' @export
 ##' @seealso \code{makeX}, \code{standardsFit}
-##' @author Henning Redestig \code{henning@@psc.riken.jp}
+##' @author Henning Redestig
 ##' @examples
 ##' data(mix)
 ##' fullFit <- standardsFit(mix, "type", ncomp=3)
@@ -146,7 +146,7 @@ standardsPred <- function(model, newdata, factors, lg=TRUE, ...) {
 ##' instead of division.
 ##' @export
 ##' @return the normalized expression set
-##' @author Henning Redestig \code{henning@@psc.riken.jp}
+##' @author Henning Redestig
 ##' @examples
 ##' data(mix)
 ##' w <- runif(ncol(mix),1, 1.3)
@@ -201,7 +201,7 @@ weightnorm <- function(object, weight="weight", lg=FALSE) {
 ##' Redestig, H.; Fukushima, A.; Stenlund, H.; Moritz, T.; Arita, M.; Saito, K. & Kusano, M.
 ##' Compensation for systematic cross-contribution improves normalization of mass spectrometry
 ##' based metabolomics data Anal Chem, 2009, 81, 7974-7980
-##' @author Henning Redestig \code{henning@@psc.riken.jp}
+##' @author Henning Redestig
 ##' @examples
 ##' data(mix)
 ##' nfit <- normFit(mix, "crmn", factors="type", ncomp=3)
@@ -238,7 +238,7 @@ normFit <- function(object, method, one="Succinate_d4", factors=NULL, lg=TRUE,
   wasNa <- !is.finite(lana)
   if(any(!is.finite(lsta)) | any(!is.finite(lsta)) |
      any(!is.finite(lana)) | any(!is.finite(lana))) {
-    warning("Found missing or negative values - applying (poor) imputation")
+    message("Found missing or negative values - applying imputation using ppca")
     lana[!is.finite(lana)] <- NA
     lsta[!is.finite(lsta)] <- NA
     lana <- completeObs(pca(lana, method="ppca"))
@@ -297,7 +297,7 @@ normFit <- function(object, method, one="Succinate_d4", factors=NULL, lg=TRUE,
 ##' @param segments normalization in a cross-validation setup, only to use for
 ##'   validation/QC purposes.
 ##' @param ... passed on to \code{normFit} and \code{normPred}
-##' @author Henning Redestig \code{henning@@psc.riken.jp}
+##' @author Henning Redestig
 ##' @seealso \code{normFit}, \code{normPred}
 ##' @return the normalized dataset
 ##' @export
@@ -314,11 +314,10 @@ normFit <- function(object, method, one="Succinate_d4", factors=NULL, lg=TRUE,
 ##' normalize(mix, "totL2")
 ##' ## can also do normalization with matrices
 ##' Y <- exprs(mix)
-##' G <- model.matrix(~-1+mix$type)
-##' isIS <- fData(mix)$tag == 'IS'
+##' G <- with(pData(mix), model.matrix(~-1+type))
+##' isIS <- with(fData(mix), tag == "IS")
 ##' normalize(Y, "crmn", factor=G, ncomp=3, standards=isIS)
 normalize <- function(object, method, segments=NULL, ...) {
-  ## cleanup the pdata slot
   if(class(object) == "ExpressionSet")
     pData(object) <- dropunusedlevels(pData(object))
 
@@ -356,7 +355,7 @@ normalize <- function(object, method, segments=NULL, ...) {
 ##'   \code{standards}, \code{analytes}
 ##' @export
 ##' @return the normalized data
-##' @author Henning Redestig \code{henning@@psc.riken.jp}
+##' @author Henning Redestig
 ##' @seealso \code{normFit}
 ##' @examples
 ##' data(mix)
@@ -365,7 +364,7 @@ normalize <- function(object, method, segments=NULL, ...) {
 ##' slplot(pca(t(log2(exprs(normedData)))), scol=as.integer(mix$type))
 ##' ## same thing
 ##' Y <- exprs(mix)
-##' G <- model.matrix(~-1+mix$type)
+##' G <- with(pData(mix), model.matrix(~-1+type))
 ##' isIS <- fData(mix)$tag == 'IS'
 ##' nfit <- normFit(Y, "crmn", factors=G, ncomp=3, standards=isIS)
 ##' normedData <- normPred(nfit, Y, G, standards=isIS)

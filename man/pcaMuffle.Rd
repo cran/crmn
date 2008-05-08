@@ -8,5 +8,5 @@ show up as poor overfitting which leads to a choice of fewer PCs
 i.e. not a problem. This function is mean to muffle those warnings.
 Only used for version of pcaMethods before 1.26.0.}
 \value{nothing}
-\author{Henning Redestig \code{henning@psc.riken.jp}}
+\author{Henning Redestig}
 \arguments{\item{w}{a warning}}

@@ -13,12 +13,14 @@ regression model.}
 components for that model, the standard deviations and mean values
 and Q2/R2 for the fit.}
 \seealso{\code{makeX}, \code{standardsPred}}
-\author{Henning Redestig \code{henning@psc.riken.jp}}
+\author{Henning Redestig}
 \arguments{\item{object}{an \code{ExpressionSet} or a \code{matrix}.
 Note that if you pass a\code{matrix} have to specify the identity of
 the standards by
 passing the appropriate argument to \code{standards}.}
-\item{factors}{the biological factors described in the pheno data slot}
+\item{factors}{the biological factors described in the pheno data slot
+if \code{object} is an \code{ExpressionSet} or a design matrix if
+\code{object} is a \code{matrix}.}
 \item{ncomp}{number of PCA components to use.
 Determined by cross-validation if left \code{NULL}}
 \item{lg}{logical indicating that the data should be log transformed}

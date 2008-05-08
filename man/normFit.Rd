@@ -23,7 +23,7 @@ selection of multiple internal standards. BMC Bioinformatics, 2007, 8, 93
 Redestig, H.; Fukushima, A.; Stenlund, H.; Moritz, T.; Arita, M.; Saito, K. & Kusano, M.
 Compensation for systematic cross-contribution improves normalization of mass spectrometry
 based metabolomics data Anal Chem, 2009, 81, 7974-7980}
-\author{Henning Redestig \code{henning@psc.riken.jp}}
+\author{Henning Redestig}
 \arguments{\item{object}{an \code{ExpressionSet} or a \code{matrix} (with samples as
 columns) in which case the \code{standards} must be passed on via \code{...}}
 \item{method}{chosen normalization method}

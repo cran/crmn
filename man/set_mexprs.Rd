@@ -8,7 +8,7 @@ just return the given matrix}
 \alias{mexprs<-}
 \alias{mexprs<-,ExpressionSet,matrix-method}
 \alias{mexprs<-,matrix,matrix-method}
-\author{Henning Redestig \code{henning@psc.riken.jp}}
+\author{Henning Redestig}
 \arguments{\item{object}{an \code{ExpressionSet} or \code{matrix}}
 \item{value}{the value to assign}}
 \examples{data(mix)

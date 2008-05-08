@@ -4,7 +4,7 @@
 \usage{normalize(object, method, segments, ...)}
 \description{Normalization methods for metabolomics data}
 \details{Wrapper function for \code{normFit} and \code{normPred}}
-\author{Henning Redestig \code{henning@psc.riken.jp}}
+\author{Henning Redestig}
 \seealso{\code{normFit}, \code{normPred}}
 \value{the normalized dataset}
 \arguments{\item{object}{an \code{ExpressionSet}}
@@ -24,6 +24,6 @@ normalize(mix, "median")
 normalize(mix, "totL2")
 ## can also do normalization with matrices
 Y <- exprs(mix)
-G <- model.matrix(~-1+mix$type)
-isIS <- fData(mix)$tag == 'IS'
+G <- with(pData(mix), model.matrix(~-1+type))
+isIS <- with(fData(mix), tag == "IS")
 normalize(Y, "crmn", factor=G, ncomp=3, standards=isIS)}

@@ -115,11 +115,13 @@ and gives programmatically useful ways to access the different types
 of data. To use this way you must first format your data to such an
 object, please read the documentation from Biobase on how to do
 this. The \texttt{ExpressionSet}-object must contain information about
-which features are the internal standards coded by a \texttt{tag}
-component which should be equal \texttt{"IS"} for the standards. To use
-the \texttt{RI} method the feature data must also contain the
-retention index of each analyte. See the dataset \texttt{mix} for an
-example.
+which features are the internal standards coded by a \texttt{tag} (or
+another column name but then you have to specify the ``where''
+argument to \texttt{analytes} and \texttt{standards}) component which
+should be equal \texttt{"IS"} (or something else which you have to
+specify via the \texttt{what} argument) for the standards. To use the
+\texttt{RI} method the feature data must also contain the retention
+index of each analyte. See the dataset \texttt{mix} for an example.
 
 Alternatively you can provide the data as a simple matrix (as for
 example read by the \texttt{read.table} function). In that case you
@@ -143,8 +145,7 @@ Ya <- analytes(mix)
 dim(Ys)
 dim(Ya)
 @ %
-These two functions must work as they should for your data too so
-make sure that they do.
+These two functions must work as they should for your data too (if you want to the the ExpressionSet interface, otherwise see Section \ref{sec:martrix}) so make sure that they do.
 
 To proceed with normalization we first fit a normalization model. The
 complexity, number of principal components, is decided by the
@@ -244,6 +245,7 @@ plot(scores(pca.crmn), col=as.integer(mix$type),
 \clearpage{}
 
 \subsection{Normalization of a \texttt{matrix}}
+\label{sec:matrix}
 First we construct the required input parameters. This would of course
 normally be done by using \texttt{read.table} to read data as obtained
 by programs such as TargetSearch, HDA, metAlign etc.

@@ -3,7 +3,7 @@
 \usage{analytes(object, standards=NULL, ...)}
 \description{Subset an data set to only contain the analytes.}
 \value{subsetted dataset}
-\author{Henning Redestig \email{henning@psc.riken.jp}}
+\author{Henning Redestig}
 \alias{analytes}
 \arguments{\item{object}{an \code{ExpressionSet}, \code{matrix} or \code{data.frame}}
 \item{standards}{a logical vector indicating which rows are internal analytes}

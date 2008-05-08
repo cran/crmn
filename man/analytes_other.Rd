@@ -6,9 +6,10 @@
 \alias{analytes,matrix,logical-method}
 \alias{analytes,data.frame,logical-method}
 \value{\code{ExpressionSet}}
-\author{Henning Redestig \email{henning@psc.riken.jp}}
+\author{Henning Redestig}
 \arguments{\item{object}{an \code{ExpressionSet}}
-\item{standards}{a logical vector indicating which rows are internal standards}
+\item{standards}{a logical vector indicating which rows are
+internal standards}
 \item{...}{not used}}
 \examples{data(mix)
 analytes(exprs(mix), fData(mix)$tag == 'IS')}

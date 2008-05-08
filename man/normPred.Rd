@@ -6,7 +6,7 @@
 \details{Apply fitted normalization parameters to new data to get normalized data.
 Current can not only handle matrices as input for methods 'RI' and 'one'.}
 \value{the normalized data}
-\author{Henning Redestig \code{henning@psc.riken.jp}}
+\author{Henning Redestig}
 \seealso{\code{normFit}}
 \arguments{\item{normObj}{the result from \code{normFit}}
 \item{newdata}{an \code{ExpressionSet} or a \code{matrix} (in which case the
@@ -24,7 +24,7 @@ normedData <- normPred(nfit, mix, "type")
 slplot(pca(t(log2(exprs(normedData)))), scol=as.integer(mix$type))
 ## same thing
 Y <- exprs(mix)
-G <- model.matrix(~-1+mix$type)
+G <- with(pData(mix), model.matrix(~-1+type))
 isIS <- fData(mix)$tag == 'IS'
 nfit <- normFit(Y, "crmn", factors=G, ncomp=3, standards=isIS)
 normedData <- normPred(nfit, Y, G, standards=isIS)

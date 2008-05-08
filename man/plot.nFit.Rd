@@ -5,7 +5,7 @@
 \description{Simple plot function for a CRMN normalization model.
 Shows Tz and the optimization (if computed) of the PCA model.}
 \value{nothing}
-\author{Henning Redestig \email{henning@psc.riken.jp}}
+\author{Henning Redestig}
 \arguments{\item{x}{an \code{nFit} object}
 \item{y}{not used}
 \item{...}{passed on to the scatter plot calls}}

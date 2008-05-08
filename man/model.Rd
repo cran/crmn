@@ -3,7 +3,7 @@
 \usage{model(object, ...)}
 \description{Get the model}
 \value{the model (content differs between normlization models)}
-\author{Henning Redestig \email{henning@psc.riken.jp}}
+\author{Henning Redestig}
 \alias{model}
 \alias{model,nFit-method}
 \arguments{\item{object}{an \code{nFit} object}

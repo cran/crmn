@@ -4,5 +4,5 @@
 \description{Show method for nFit}
 \value{prints some basic information}
 \alias{show_nfit}
-\author{Henning Redestig \code{henning@psc.riken.jp}}
+\author{Henning Redestig}
 \arguments{\item{object}{the \code{nFit} object}}

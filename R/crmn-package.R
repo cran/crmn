@@ -19,7 +19,7 @@
 #' @aliases crmn
 #' @docType package
 #' @title CRMN
-#' @author Henning Redestig \email{henning@@psc.riken.jp}
+#' @author Henning Redestig
 NULL
 
 #' Mixture dilution series
@@ -37,6 +37,6 @@ NULL
 #'  fData(mix)
 #'  exprs(mix)
 #'  pData(mix)
-#' @author Henning Redestig \email{henning@@psc.riken.jp}
+#' @author Henning Redestig
 NULL
 

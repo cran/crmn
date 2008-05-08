@@ -9,7 +9,7 @@ the overlapping variance. The prediction is given by
 \eqn{\hat{X}_{IS}=X_{IS}-X_{IS}B}{XhatIS=XIS-XIS*B}}
 \value{the corrected data}
 \seealso{\code{makeX}, \code{standardsFit}}
-\author{Henning Redestig \code{henning@psc.riken.jp}}
+\author{Henning Redestig}
 \arguments{\item{model}{result from \code{standardsFit}}
 \item{newdata}{an \code{ExpressionSet} or \code{matrix} with new data (or the data
 used to fit the model to get the fitted data)}
