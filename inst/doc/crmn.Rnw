@@ -153,18 +153,18 @@ use CRMN we also need access to the experimental design. This can be
 done automatically by specifying the relevant factors in the
 \texttt{pData} object of the data or by directly providing a design
 matrix. I.e:
-<<nfit1>>=
+<<nfit-eset>>=
 nfit <- normFit(mix, "crmn", factor="type", ncomp=2)
 @ %
 Is the same as doing:
-<<nfit1>>=
+<<nfit-matrix>>=
 G <- model.matrix(~-1+mix$type)
 nfit <- normFit(mix, "crmn", factor=G, ncomp=2)
 @ %
 
 We proceed by not specifying the complexity but letting the cross-validation
 take care of this step. 
-<<nfit>>=
+<<nfit-eset-w-q2>>=
 nfit <- normFit(mix, "crmn", factor="type")
 #complexty (number of PC's):
 sFit(nfit)$ncomp

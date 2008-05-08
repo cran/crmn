@@ -18,7 +18,7 @@
 ##'   Determined by cross-validation if left \code{NULL}
 ##' @param lg logical indicating that the data should be log transformed 
 ##' @param fitfunc the function that creates the model fit for normalization, must use the same interfaces as \code{lm}.
-##' @param ... passed on to \code{Q2}, \code{pca}, \code{standards} and \code{analytes}
+##' @param ... passed on to \code{Q2}, \code{pca} (if pcaMethods > 1.26.0), \code{standards} and \code{analytes}
 ##' @return a list containing the PCA/MLR model, the recommended number of
 ##' components for that model, the standard deviations and mean values
 ##' and Q2/R2 for the fit.
@@ -51,14 +51,15 @@ standardsFit <- function(object, factors, ncomp=NULL, lg=TRUE, fitfunc=lm, ...) 
   hp <- library(help="pcaMethods")$info[[1]]
   ver <- gsub("Version:", "", hp[grep("Version:", hp)])
   if(compareVersion(ver, "1.26.0") == 1)
-    withCallingHandlers(pc <- pca(zbzhate, nPcs=np, ...), warning=pcaMuffle)
+    pc <- pca(zbzhate, nPcs=np, verbose=FALSE, ...)
   else
-    withCallingHandlers(pc <- pca(zbzhate, nPcs=np, method="ppca"), warning=pcaMuffle)
+    withCallingHandlers(pc <- pca(zbzhate, nPcs=np, method="nipals", verbose=FALSE),
+                        warning=pcaMuffle)
 
-  r2 <- q2 <- NULL
+  r2 <- NULL -> q2
   best <- min(np, ncomp)
   if(is.null(ncomp)) {
-    withCallingHandlers(q2 <- Q2(pc, zbzhate, ...), warning=pcaMuffle)
+    withCallingHandlers(q2 <- Q2(pc, zbzhate, nruncv=1, ...), warning=pcaMuffle)
     r2 <- pc@R2
     best <- which.max(q2)
   }
@@ -70,6 +71,7 @@ standardsFit <- function(object, factors, ncomp=NULL, lg=TRUE, fitfunc=lm, ...) 
 ##' PCs. The first is non-informative and the poorly estimated PCs will
 ##' show up as poor overfitting which leads to a choice of fewer PCs
 ##' i.e. not a problem. This function is mean to muffle those warnings.
+##' Only used for version of pcaMethods before 1.26.0.
 ##' @title Muffle the pca function
 ##' @param w a warning
 ##' @return nothing
