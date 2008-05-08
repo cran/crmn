@@ -204,9 +204,11 @@ weightnorm <- function(object, weight="weight", lg=FALSE) {
 ##' @seealso \code{normPred}, \code{standards}, \code{model.matrix}
 ##' @references Sysi-Aho, M.; Katajamaa, M.; Yetukuri, L. & Oresic,
 ##' M. Normalization method for metabolomics data using optimal
-##' selection of multiple internal standards. BMC Bioinformatics, >,
-##' 2007, 8, 93
-##' Redestig, H unpublished
+##' selection of multiple internal standards. BMC Bioinformatics, 2007, 8, 93
+##'
+##' Redestig, H.; Fukushima, A.; Stenlund, H.; Moritz, T.; Arita, M.; Saito, K. & Kusano, M.
+##' Compensation for systematic cross-contribution improves normalization of mass spectrometry
+##' based metabolomics data Anal Chem, 2009, 81, 7974-7980
 ##' @author Henning Redestig \code{henning@@psc.riken.jp}
 ##' @examples
 ##' data(mix)
@@ -256,15 +258,15 @@ normFit <- function(object, method, one="Succinate_d4", factors=NULL, lg=TRUE,
 
   model <- switch(method,
                   ri = {
-                    list(one)
+                    list(one=one)
                   },
                   one = {
-                    list(one)
+                    list(one=one)
                   },
                   t1 = {
                     stacale <-
                       sqrt(diag(crossprod(sta)) / (nrow(sta)))
-                    list(stacale)
+                    list(stascale=stacale)
                   },
                   nomis = {
                     ## save the original means
@@ -389,7 +391,7 @@ normPred <- function(normObj, newdata, factors=NULL, lg=TRUE, ...) {
   normedData <-
     switch(method(normObj),
            t1 = {
-             nsta <- sweep(sta, 2, model(normObj)[[1]], "/")
+             nsta <- sweep(sta, 2, model(normObj)$stascale, "/")
              corrFac <- rowMeans(nsta, na.rm=TRUE)
 
              sweep(ana, 1, corrFac, "/")
@@ -453,9 +455,13 @@ normPred <- function(normObj, newdata, factors=NULL, lg=TRUE, ...) {
            },
            one = {
              # TODO this won't work with matrix
-             chosen <- grep(model(normObj), fData(standards(newdata))$synonym)
-             if(length(chosen) == 0)
-               stop("chosen LIS for 'one' not found")
+             chosen <- grep(model(normObj)$one, fData(standards(newdata))$synonym)
+             if(length(chosen) == 0) 
+               stop(paste("chosen internal standard ", model(normObj)$one,
+                          " not found. Choose one of ", 
+                          paste(fData(standards(newdata))$synonym, collapse=", ",
+                                sep=""),
+                          sep=""))
              corrFac <- sta[,chosen]
 
              if(lg)
@@ -496,7 +502,7 @@ normPred <- function(normObj, newdata, factors=NULL, lg=TRUE, ...) {
              if(all(is.na(as.numeric(fData(standards(newdata))$RI))))
                stop("Missing RI data")
              # TODO this won't work with matrix
-             chosen <- grep(model(normObj), fData(standards(newdata))$synonym)
+             chosen <- grep(model(normObj)$one, fData(standards(newdata))$synonym)
              riMapping <- sapply(as.numeric(fData(analytes(newdata))$RI),
                                  function(x) {
                if(is.na(x))

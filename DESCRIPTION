@@ -1,5 +1,5 @@
 Package: crmn
-Version: 0.0.7
+Version: 0.0.8
 Date: 2008-05-08
 Author: Henning Redestig
 Maintainer: Henning Redestig <henning@psc.riken.jp>
@@ -10,6 +10,6 @@ Description: Implements the Cross-contribution Compensating Multiple
         algorithms.
 License: GPL (>= 3)
 Collate: 'classes.R' 'crmn-package.R' 'misc.R' 'norm.R' 'generic.R'
-Packaged: 2009-11-30 03:58:19 UTC; henning
+Packaged: 2009-12-02 08:22:35 UTC; henning
 Repository: CRAN
-Date/Publication: 2009-11-30 14:27:26
+Date/Publication: 2009-12-02 08:42:27
