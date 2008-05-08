@@ -1,11 +1,9 @@
 \name{normalize}
 \alias{normalize}
-\title{Normalize...}
+\title{Normalize a metabolomics dataset}
 \usage{normalize(object, method, segments, ...)}
-\description{Normalize}
-\details{Normalize a metabolomics dataset
-
-Wrapper function for \code{normFit} and \code{normPred}}
+\description{Normalization methods for metabolomics data}
+\details{Wrapper function for \code{normFit} and \code{normPred}}
 \author{Henning Redestig \code{henning@psc.riken.jp}}
 \seealso{\code{normFit}, \code{normPred}}
 \value{the normalized dataset}

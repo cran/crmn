@@ -1,8 +1,7 @@
 \name{analytes}
-\title{Accessor for the analytes...}
+\title{Accessor for the analytes}
 \usage{analytes(object, standards=NULL, ...)}
-\description{Accessor for the analytes}
-\details{Subset an data set to only contain the analytes.}
+\description{Subset an data set to only contain the analytes.}
 \value{subsetted dataset}
 \author{Henning Redestig \email{henning@psc.riken.jp}}
 \alias{analytes}

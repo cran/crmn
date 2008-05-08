@@ -1,8 +1,7 @@
 \name{standards}
-\title{Accessor for the Internal Standards...}
+\title{Accessor for the Internal Standards}
 \usage{standards(object, standards=NULL, ...)}
-\description{Accessor for the Internal Standards}
-\details{Subset an data set to only contain the labeled internal standards.}
+\description{Subset an data set to only contain the labeled internal standards.}
 \value{subsetted dataset}
 \author{Henning Redestig \email{henning@psc.riken.jp}}
 \alias{standards}

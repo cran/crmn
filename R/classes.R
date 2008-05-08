@@ -1,7 +1,6 @@
-##' Normalization model
-##'
 ##' Common class representation for normalization models.
 ##'
+##' @title Normalization model
 ##' @docType class
 ##' @aliases nFit nFit-class
 ##' @exportClass nFit

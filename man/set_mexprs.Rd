@@ -1,10 +1,8 @@
 \name{set_mexprs}
-\title{Matrix safe setter of expression slot...}
+\title{Accessor}
 \usage{mexprs(object) <- value}
 \description{Matrix safe setter of expression slot}
-\details{Accessor
-
-Set the expression data in an \code{ExpressionSet} or
+\details{Set the expression data in an \code{ExpressionSet} or
 just return the given matrix}
 \value{the expression data}
 \alias{mexprs<-}

@@ -1,9 +1,8 @@
 \name{plot.nFit}
 \alias{plot.nFit}
-\title{Plot nfit...}
+\title{Plot a statistics for CRMN normalization model}
 \usage{plot.nFit(x, y, ...)}
-\description{Plot nfit}
-\details{Simple plot function for a CRMN normalization model.
+\description{Simple plot function for a CRMN normalization model.
 Shows Tz and the optimization (if computed) of the PCA model.}
 \value{nothing}
 \author{Henning Redestig \email{henning@psc.riken.jp}}

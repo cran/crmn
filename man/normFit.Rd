@@ -1,12 +1,10 @@
 \name{normFit}
 \alias{normFit}
-\title{Fit a normalization model...}
+\title{Fit a normalization model}
 \usage{normFit(object, method, one="Succinate_d4", factors, lg=TRUE,
     fitfunc=lm, ...)}
-\description{Fit a normalization model}
-\details{Fit the parameters for normalization of a metabolomics data set.
-
-Normalization is first done by fitting a model and then applying
+\description{Fit the parameters for normalization of a metabolomics data set.}
+\details{Normalization is first done by fitting a model and then applying
 that model either to new data or the same data using
 \code{normPred}. Five different methods are implemented.
 \describe{

@@ -1,7 +1,6 @@
-##' Show nfit
-##'
 ##' Show method for nFit
 ##'
+##' @title Show nfit
 ##' @param object the \code{nFit} object
 ##' @return prints some basic information
 ##' @aliases show_nfit
@@ -25,11 +24,10 @@ show_nfit <- function(object) {
   }
 }
 
-##' Plot nfit
-##'
 ##' Simple plot function for a CRMN normalization model.
 ##' Shows Tz and the optimization (if computed) of the PCA model.
 ##'
+##' @title Plot a statistics for CRMN normalization model
 ##' @param x an \code{nFit} object
 ##' @param y not used
 ##' @param ... passed on to the scatter plot calls
@@ -46,8 +44,9 @@ plot.nFit <- function(x, y=NULL,...) {
   pcMod <- sFit(x)$fit$pc
   if(!is.null(sFit(x)$q2)) {
     par(mfrow=c(1,3))
-    xx <- rbind(drop(sFit(x)$q2),
-                drop(cumsum(sFit(x)$r2)))
+    mindim <- min(length(drop(sFit(x)$q2)), nPcs(sFit(x)$fit$pc))
+    xx <- rbind(drop(sFit(x)$q2)[1:mindim],
+                drop(cumsum(sFit(x)$r2))[1:mindim])
     barplot(xx, beside=TRUE,
                sub=expression(T[z] ~~ optimization), ylim=c(0,1.1))
     legend(x="topleft", fill=c("white", "grey"),
@@ -63,10 +62,9 @@ plot.nFit <- function(x, y=NULL,...) {
 }
 
 
-##' Accessor for the Internal Standards
-##'
 ##' Subset an data set to only contain the labeled internal standards.
 ##'
+##' @title Accessor for the Internal Standards
 ##' @param object an \code{ExpressionSet}
 ##' @param ... not used
 ##' @return subsetted dataset
@@ -83,10 +81,9 @@ standards_eset <- function(object, ...) {
   object[fData(object)$tag %in% "IS",]
 }
 
-##' Accessor for the Internal Standards
-##'
 ##' Subset an data set to only contain the labeled internal standards.
 ##'
+##' @title Accessor for the Internal Standards
 ##' @param object an \code{matrix} or \code{data.frame}
 ##' @param standards a logical vector indicating which rows are internal standards
 ##' @param ... not used
@@ -102,10 +99,9 @@ standards_other <- function(object, standards, ...) {
   object[standards,,drop=FALSE]
 }
 
-##' Accessor for the analytes
-##'
 ##' Subset an expression set to remove the internal standards
 ##'
+##' @title Accessor for the analytes
 ##' @param object an \code{ExpressionSet}
 ##' @param ... not used
 ##' @aliases analytes_eset analytes,ExpressionSet,missing-method 
@@ -124,10 +120,9 @@ analytes_eset<- function(object, ...) {
   object[chosen,]
 }
 
-##' Accessor for the analytes
-##'
 ##' Subset an expression set to remove the internal standards
 ##'
+##' @title Accessor for the analytes
 ##' @param object an \code{ExpressionSet}
 ##' @param standards a logical vector indicating which rows are internal standards
 ##' @param ... not used
@@ -141,15 +136,13 @@ analytes_eset<- function(object, ...) {
 analytes_other<- function(object, standards, ...)
   object[!standards,,drop=FALSE]
 
-##' Make X
-##'
 ##' Construct a design matrix 
 ##'
 ##' Make a design matrix from the pheno data slot of an expression
 ##' set, taking care that factors and numerical are handled
 ##' properly. No interactions are included and formula is the most
 ##' simple possible, i.e. \code{y~-1+term1+term2+...}
-##'
+##' @title Make X
 ##' @param object an \code{ExpressionSet}
 ##' @param factors column names from the pheno data of \code{object}
 ##' @param ... not used
@@ -174,12 +167,11 @@ makeX_eset <- function(object, factors, ...) {
   as.matrix(mod)
 }  
 
-##' Make X
-##'
 ##' Construct a design matrix 
 ##'
 ##' Convenience function that just return the given design matrix. 
 ##'
+##' @title Make X
 ##' @param object, not used
 ##' @param factors a design matrix
 ##' @param ... not used
@@ -193,10 +185,9 @@ makeX_eset <- function(object, factors, ...) {
 makeX_other <- function(object, factors, ...)
   factors
 
-##' Drop unused levels
-##'
 ##' Drop unused factor levels in a data frame.
 ##'
+##' @title Drop unused levels
 ##' @param x the data frame
 ##' @author Henning Redestig \code{henning@@psc.riken.jp}
 ##' @export

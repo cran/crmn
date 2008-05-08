@@ -1,0 +1,2 @@
+* Version 0.0.10 <2010-01-04 Mon>
+The pcaMethods package now contain Krzanowski style cross-validation which yields more stable results and crmn now use this CV by default.

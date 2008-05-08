@@ -1,11 +1,9 @@
 \name{normPred}
 \alias{normPred}
-\title{Predict for normalization...}
+\title{Predict for normalization}
 \usage{normPred(normObj, newdata, factors, lg=TRUE, ...)}
-\description{Predict for normalization}
-\details{Predict the normalized data using a previously fitted normalization model.
-
-Apply fitted normalization parameters to new data to get normalized data.
+\description{Predict the normalized data using a previously fitted normalization model.}
+\details{Apply fitted normalization parameters to new data to get normalized data.
 Current can not only handle matrices as input for methods 'RI' and 'one'.}
 \value{the normalized data}
 \author{Henning Redestig \code{henning@psc.riken.jp}}

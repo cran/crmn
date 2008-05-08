@@ -1,8 +1,7 @@
 \name{show_nfit}
-\title{Show nfit...}
+\title{Show nfit}
 \usage{show_nfit(object)}
-\description{Show nfit}
-\details{Show method for nFit}
+\description{Show method for nFit}
 \value{prints some basic information}
 \alias{show_nfit}
 \author{Henning Redestig \code{henning@psc.riken.jp}}

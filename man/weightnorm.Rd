@@ -1,11 +1,9 @@
 \name{weightnorm}
 \alias{weightnorm}
-\title{weigthnorm...}
+\title{Normalize by sample weight}
 \usage{weightnorm(object, weight="weight", lg=FALSE)}
-\description{weigthnorm}
-\details{Normalize by sample weight
-
-Normalize each sample by dividing by the loaded sample weight. The
+\description{Normalize samples by their weight (as in grams fresh weight)}
+\details{Normalize each sample by dividing by the loaded sample weight. The
 weight argument is takes from the pheno data (or given as numerical
 vector with one value per sample). Missing values are not
 tolerated.}

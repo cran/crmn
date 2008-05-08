@@ -1,8 +1,7 @@
 \name{analytes_other}
-\title{Accessor for the analytes...}
+\title{Accessor for the analytes}
 \usage{analytes_other(object, standards, ...)}
-\description{Accessor for the analytes}
-\details{Subset an expression set to remove the internal standards}
+\description{Subset an expression set to remove the internal standards}
 \alias{analytes_other}
 \alias{analytes,matrix,logical-method}
 \alias{analytes,data.frame,logical-method}

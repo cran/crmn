@@ -1,11 +1,8 @@
 \name{standardsPred}
 \alias{standardsPred}
-\title{Standards model...}
+\title{Predict effect for new data (or get fitted data)}
 \usage{standardsPred(model, newdata, factors, lg=TRUE, ...)}
-\description{Standards model}
-\details{Predict effect for new data (or get fitted data)
-
-There is often unwanted variation in among the labeled internal
+\description{There is often unwanted variation in among the labeled internal
 standards which is related to the experimental factors due to
 overlapping peaks etc. This predicts this effect given a model of
 the overlapping variance. The prediction is given by

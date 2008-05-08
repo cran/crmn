@@ -1,5 +1,3 @@
-##' Standards model
-##'
 ##' Fit a model which describes the variation of the labeled internal
 ##' standards from the biological factors.
 ##'
@@ -8,7 +6,7 @@
 ##' overlapping peaks etc. This function fits a model that describes
 ##' that overlapping variation using a scaled and centered PCA / multiple linear
 ##' regression model. 
-##' 
+##' @title Standards model
 ##' @param object an \code{ExpressionSet} or a \code{matrix}.
 ##'   Note that if you pass a\code{matrix} have to specify the identity of
 ##'   the standards by
@@ -20,7 +18,7 @@
 ##'   Determined by cross-validation if left \code{NULL}
 ##' @param lg logical indicating that the data should be log transformed 
 ##' @param fitfunc the function that creates the model fit for normalization, must use the same interfaces as \code{lm}.
-##' @param ... passed on to \code{Q2}, \code{standards} and \code{analytes}
+##' @param ... passed on to \code{Q2}, \code{pca}, \code{standards} and \code{analytes}
 ##' @return a list containing the PCA/MLR model, the recommended number of
 ##' components for that model, the standard deviations and mean values
 ##' and Q2/R2 for the fit.
@@ -51,13 +49,12 @@ standardsFit <- function(object, factors, ncomp=NULL, lg=TRUE, fitfunc=lm, ...) 
   zbzhate <- cbind(resid(pfit))
   np <- max(1, min(nrow(zbzhate) - 1, ncol(zbzhate) - 1, ncomp))
   
-  withCallingHandlers(pc <- pca(zbzhate, nPcs=np,
-                                method=ifelse(np == 1, "svd", "ppca")),
-                      warning=pcaMuffle)
+  withCallingHandlers(pc <- pca(zbzhate, nPcs=np, ...), warning=pcaMuffle)
+
   r2 <- q2 <- NULL
   best <- min(np, ncomp)
   if(is.null(ncomp)) {
-    withCallingHandlers(q2 <- Q2(pc, zbzhate, nruncv=1, ...), warning=pcaMuffle)
+    withCallingHandlers(q2 <- Q2(pc, zbzhate, ...), warning=pcaMuffle)
     r2 <- pc@R2
     best <- which.max(q2)
   }
@@ -65,15 +62,11 @@ standardsFit <- function(object, factors, ncomp=NULL, lg=TRUE, fitfunc=lm, ...) 
   list(fit=list(fit=pfit,pc=pc), ncomp=best, means=means, sds=sds, q2=q2, r2=r2)
 }
 
-##' Muffle
-##'
-##' Muffle the pca function
-##'
 ##' PCA and Q2 issues warnings about biasedness and poorly estimated
 ##' PCs. The first is non-informative and the poorly estimated PCs will
 ##' show up as poor overfitting which leads to a choice of fewer PCs
 ##' i.e. not a problem. This function is mean to muffle those warnings.
-##' 
+##' @title Muffle the pca function
 ##' @param w a warning
 ##' @return nothing
 ##' @author Henning Redestig \code{henning@@psc.riken.jp}
@@ -81,16 +74,12 @@ pcaMuffle <- function(w) if(any(grepl("Precision for components", w),
                                 grepl("Validation incomplete", w)))
   invokeRestart( "muffleWarning" )
 
-##' Standards model
-##'
-##' Predict effect for new data (or get fitted data)
-##'
 ##' There is often unwanted variation in among the labeled internal
 ##' standards which is related to the experimental factors due to
 ##' overlapping peaks etc. This predicts this effect given a model of
 ##' the overlapping variance. The prediction is given by
 ##' \eqn{\hat{X}_{IS}=X_{IS}-X_{IS}B}{XhatIS=XIS-XIS*B}
-##' 
+##' @title Predict effect for new data (or get fitted data)
 ##' @param model result from \code{standardsFit}
 ##' @param newdata an \code{ExpressionSet} or \code{matrix} with new data (or the data
 ##' used to fit the model to get the fitted data)
@@ -136,15 +125,13 @@ standardsPred <- function(model, newdata, factors, lg=TRUE, ...) {
   predict(model$fit$pc, cslstaE, pcs=model$ncomp)$scores
 }
 
-##' weigthnorm
-##'
-##' Normalize by sample weight
+##' Normalize samples by their weight (as in grams fresh weight)
 ##'
 ##' Normalize each sample by dividing by the loaded sample weight. The
 ##' weight argument is takes from the pheno data (or given as numerical
 ##' vector with one value per sample). Missing values are not
 ##' tolerated.
-##'
+##' @title Normalize by sample weight
 ##' @param object an \code{ExpressionSet}
 ##' @param weight a string naming the pheno data column with the weight
 ##' or a numeric vector with one weight value per sample.
@@ -176,8 +163,6 @@ weightnorm <- function(object, weight="weight", lg=FALSE) {
   object
 }
 
-##' Fit a normalization model
-##'
 ##' Fit the parameters for normalization of a metabolomics data set.
 ##'
 ##' Normalization is first done by fitting a model and then applying
@@ -190,6 +175,7 @@ weightnorm <- function(object, weight="weight", lg=FALSE) {
 ##' \item{nomis}{See Sysi-Aho et al.}
 ##' \item{crmn}{See Redestig et al.}
 ##' }
+##' @title Fit a normalization model
 ##' @param object an \code{ExpressionSet} or a \code{matrix} (with samples as
 ##'   columns) in which case the \code{standards} must be passed on via \code{...}
 ##' @param method chosen normalization method
@@ -296,12 +282,10 @@ normFit <- function(object, method, one="Succinate_d4", factors=NULL, lg=TRUE,
   return(new("nFit", model=model, sFit=sfit, method=method))
 }
 
-##' Normalize
-##'
-##' Normalize a metabolomics dataset
+##' Normalization methods for metabolomics data
 ##'
 ##' Wrapper function for \code{normFit} and \code{normPred}
-##'
+##' @title Normalize a metabolomics dataset
 ##' @param object an \code{ExpressionSet}
 ##' @param method the desired method
 ##' @param segments normalization in a cross-validation setup, only to use for
@@ -349,13 +333,11 @@ normalize <- function(object, method, segments=NULL, ...) {
   object
 }
 
-##' Predict for normalization
-##'
 ##' Predict the normalized data using a previously fitted normalization model.
 ##'
 ##' Apply fitted normalization parameters to new data to get normalized data.
 ##' Current can not only handle matrices as input for methods 'RI' and 'one'.
-##'
+##' @title Predict for normalization
 ##' @param normObj the result from \code{normFit}
 ##' @param newdata an \code{ExpressionSet} or a \code{matrix} (in which case the
 ##'   \code{standards} must be passed on via \code{...}),

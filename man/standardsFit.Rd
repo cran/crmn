@@ -1,12 +1,10 @@
 \name{standardsFit}
 \alias{standardsFit}
-\title{Standards model...}
+\title{Standards model}
 \usage{standardsFit(object, factors, ncomp, lg=TRUE, fitfunc=lm, ...)}
-\description{Standards model}
-\details{Fit a model which describes the variation of the labeled internal
-standards from the biological factors.
-
-There is often unwanted variation in among the labeled internal
+\description{Fit a model which describes the variation of the labeled internal
+standards from the biological factors.}
+\details{There is often unwanted variation in among the labeled internal
 standards which is related to the experimental factors due to
 overlapping peaks etc. This function fits a model that describes
 that overlapping variation using a scaled and centered PCA / multiple linear
@@ -25,7 +23,7 @@ passing the appropriate argument to \code{standards}.}
 Determined by cross-validation if left \code{NULL}}
 \item{lg}{logical indicating that the data should be log transformed}
 \item{fitfunc}{the function that creates the model fit for normalization, must use the same interfaces as \code{lm}.}
-\item{...}{passed on to \code{Q2}, \code{standards} and \code{analytes}}}
+\item{...}{passed on to \code{Q2}, \code{pca}, \code{standards} and \code{analytes}}}
 \examples{data(mix)
 sfit <- standardsFit(mix, "type", ncomp=3)
 slplot(sfit$fit$pc)

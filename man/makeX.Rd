@@ -1,9 +1,7 @@
 \name{makeX}
-\title{Make X...}
-\description{Make X}
-\details{Construct a design matrix 
-
-Make a design matrix from the pheno data slot of an expression
+\title{Make X}
+\description{Construct a design matrix}
+\details{Make a design matrix from the pheno data slot of an expression
 set, taking care that factors and numerical are handled
 properly. No interactions are included and formula is the most
 simple possible, i.e. \code{y~-1+term1+term2+...}. Can also be given

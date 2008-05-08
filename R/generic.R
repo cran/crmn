@@ -1,15 +1,14 @@
-#' @include norm.R
-#' @include classes.R
-#' @include misc.R
+##' @include norm.R
+##' @include classes.R
+##' @include misc.R
 
 setGeneric("model", function(object, ...)
            standardGeneric("model"))
 setGeneric("method", function(object, ...)
            standardGeneric("method"))
-##' Accessor for the model
-##'
 ##' Get the model
 ##'
+##' @title Accessor for the model
 ##' @usage model(object, ...)
 ##' @param object an \code{nFit} object
 ##' @param ... not used
@@ -19,10 +18,9 @@ setGeneric("method", function(object, ...)
 ##' @exportMethod model
 setMethod("model", signature(object="nFit"), function(object) object@model)
 
-##' Accessor for the method
-##'
 ##' Get the method
 ##'
+##' @title Accessor for the method
 ##' @usage method(object, ...)
 ##' @param object an \code{nFit} object
 ##' @param ... not used
@@ -35,10 +33,10 @@ setMethod("method", signature(object="nFit"), function(object) object@method)
 
 setGeneric("sFit", function(object, ...)
            standardGeneric("sFit"))
-##' Accessor for the standards model
-##'
+
 ##' Get the sFit
 ##'
+##' @title Accessor for the standards model
 ##' @usage sFit(object, ...)
 ##' @param object an \code{nFit} object
 ##' @param ... not used
@@ -55,10 +53,10 @@ setMethod("standards", signature(object="ExpressionSet",
                                  standards="missing"), standards_eset)
 setMethod("standards", signature(object="matrix",
                                  standards="logical"), standards_other)
-##' Accessor for the Internal Standards
-##'
+
 ##' Subset an data set to only contain the labeled internal standards.
 ##'
+##' @title Accessor for the Internal Standards
 ##' @name standards
 ##' @usage standards(object, standards=NULL, ...)
 ##' @param object an \code{ExpressionSet}, \code{matrix} or \code{data.frame}
@@ -82,10 +80,10 @@ setMethod("analytes", signature(object="ExpressionSet",
                                  standards="missing"), analytes_eset)
 setMethod("analytes", signature(object="matrix",
                                  standards="logical"), analytes_other)
-##' Accessor for the analytes
-##'
+
 ##' Subset an data set to only contain the analytes.
 ##'
+##' @title Accessor for the analytes
 ##' @name analytes
 ##' @usage analytes(object, standards=NULL, ...)
 ##' @param object an \code{ExpressionSet}, \code{matrix} or \code{data.frame}
@@ -107,8 +105,7 @@ setGeneric("makeX", function(object, factors, ...)
            standardGeneric("makeX"))
 setMethod("makeX", signature(object="ExpressionSet",
                              factors="character"), makeX_eset)
-##' Make X
-##'
+
 ##' Construct a design matrix 
 ##'
 ##' Make a design matrix from the pheno data slot of an expression
@@ -117,7 +114,7 @@ setMethod("makeX", signature(object="ExpressionSet",
 ##' simple possible, i.e. \code{y~-1+term1+term2+...}. Can also be given
 ##' anything as object in which case \code{factor} must be a design matrix.
 ##' It that case the same design matrix is returned. 
-##'
+##' @title Make X
 ##' @param object an \code{ExpressionSet}
 ##' @param factors column names from the pheno data of \code{object}
 ##'  or a design matrix
@@ -138,13 +135,11 @@ setMethod("makeX", signature(object="ANY",
 setGeneric("mexprs", function(object)
            standardGeneric("mexprs"))
 setMethod("mexprs", "ExpressionSet", function(object) exprs(object))
-##' Matrix safe accessor of expression slot
-##'
-##' Accessor
-##'
+
 ##' Get the expression data from an \code{ExpressionSet} or
 ##' just return the given matrix
 ##'
+##' @title Matrix safe accessor of expression slot
 ##' @param object an \code{ExpressionSet} or \code{matrix}
 ##' @usage mexprs(object)
 ##' @return the expression data
@@ -169,13 +164,12 @@ setReplaceMethod("mexprs", signature("ExpressionSet","matrix"),
                    exprs(object) <- value
                    object
                })
+
 ##' Matrix safe setter of expression slot
-##'
-##' Accessor
 ##'
 ##' Set the expression data in an \code{ExpressionSet} or
 ##' just return the given matrix
-##'
+##' @title Accessor
 ##' @name set_mexprs
 ##' @param object an \code{ExpressionSet} or \code{matrix}
 ##' @param value the value to assign
@@ -195,13 +189,9 @@ setReplaceMethod("mexprs", signature("ExpressionSet","matrix"),
 ##' head(mexprs(test))
 setReplaceMethod("mexprs", signature("matrix","matrix"),function(object, value) value)
 
-
-##' Show 
-##'
-##' Show method for nFit
-##'
 ##' Show some basic information for an nFit model
 ##'
+##' @title Show method for nFit
 ##' @name show
 ##' @param object the \code{nFit} object
 ##' @return prints some basic information
