@@ -48,8 +48,12 @@ standardsFit <- function(object, factors, ncomp=NULL, lg=TRUE, fitfunc=lm, ...) 
   pfit <- fitfunc(clsta~-1+I(X))
   zbzhate <- cbind(resid(pfit))
   np <- max(1, min(nrow(zbzhate) - 1, ncol(zbzhate) - 1, ncomp))
-  
-  withCallingHandlers(pc <- pca(zbzhate, nPcs=np, ...), warning=pcaMuffle)
+  hp <- library(help="pcaMethods")$info[[1]]
+  ver <- gsub("Version:", "", hp[grep("Version:", hp)])
+  if(compareVersion(ver, "1.26.0") == 1)
+    withCallingHandlers(pc <- pca(zbzhate, nPcs=np, ...), warning=pcaMuffle)
+  else
+    withCallingHandlers(pc <- pca(zbzhate, nPcs=np, method="ppca"), warning=pcaMuffle)
 
   r2 <- q2 <- NULL
   best <- min(np, ncomp)
