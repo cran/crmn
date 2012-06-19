@@ -1,8 +1,19 @@
 \name{show_nfit}
-\title{Show nfit}
-\usage{show_nfit(object)}
-\description{Show method for nFit}
-\value{prints some basic information}
 \alias{show_nfit}
-\author{Henning Redestig}
-\arguments{\item{object}{the \code{nFit} object}}
+\title{Show nfit}
+\usage{
+  show_nfit(object)
+}
+\arguments{
+  \item{object}{the \code{nFit} object}
+}
+\value{
+  prints some basic information
+}
+\description{
+  Show method for nFit
+}
+\author{
+  Henning Redestig
+}
+

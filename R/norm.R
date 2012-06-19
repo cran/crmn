@@ -4,27 +4,29 @@
 ##' There is often unwanted variation in among the labeled internal
 ##' standards which is related to the experimental factors due to
 ##' overlapping peaks etc. This function fits a model that describes
-##' that overlapping variation using a scaled and centered PCA / multiple linear
-##' regression model. 
+##' that overlapping variation using a scaled and centered PCA /
+##' multiple linear regression model. Scaling is done outside the PCA
+##' model.
 ##' @title Standards model
-##' @param object an \code{ExpressionSet} or a \code{matrix}.
-##'   Note that if you pass a\code{matrix} have to specify the identity of
-##'   the standards by
-##'   passing the appropriate argument to \code{standards}.
-##' @param factors the biological factors described in the pheno data slot
-##' if \code{object} is an \code{ExpressionSet} or a design matrix if
-##'    \code{object} is a \code{matrix}.
-##' @param ncomp number of PCA components to use.
-##'   Determined by cross-validation if left \code{NULL}
-##' @param lg logical indicating that the data should be log transformed 
-##' @param fitfunc the function that creates the model fit for normalization, must use the same interfaces as \code{lm}.
-##' @param ... passed on to \code{Q2}, \code{pca} (if pcaMethods > 1.26.0), \code{standards} and \code{analytes}
+##' @param object an \code{ExpressionSet} or a \code{matrix}.   Note
+##' that if you pass a\code{matrix} have to specify the identity of
+##' the standards by   passing the appropriate argument to
+##' \code{standards}.
+##' @param factors the biological factors described in the pheno data
+##' slot if \code{object} is an \code{ExpressionSet} or a design
+##' matrix if \code{object} is a \code{matrix}.
+##' @param ncomp number of PCA components to use.   Determined by
+##' cross-validation if left \code{NULL}
+##' @param lg logical indicating that the data should be log
+##' transformed 
+##' @param fitfunc the function that creates the model fit for
+##' normalization, must use the same interfaces as \code{lm}.
+##' @param ... passed on to \code{Q2}, \code{pca} (if pcaMethods >
+##' 1.26.0), \code{standards} and \code{analytes}
 ##' @return a list containing the PCA/MLR model, the recommended number of
 ##' components for that model, the standard deviations and mean values
 ##' and Q2/R2 for the fit.
-##' @export
 ##' @seealso \code{makeX}, \code{standardsPred}
-##' @author Henning Redestig
 ##' @examples
 ##' data(mix)
 ##' sfit <- standardsFit(mix, "type", ncomp=3)
@@ -34,14 +36,14 @@
 ##' G <- model.matrix(~-1+mix$type)
 ##' isIS <- fData(mix)$tag == 'IS'
 ##' sfit <- standardsFit(Y, G, standards=isIS, ncomp=3)
+##' @author Henning Redestig
+##' @export
 standardsFit <- function(object, factors, ncomp=NULL, lg=TRUE, fitfunc=lm, ...) {
   X <- makeX(object, factors)
 
   if(lg)
-    lsta <- log2(t(mexprs(standards(object, ...))))
-  else
+    lsta <- log2(t(mexprs(standards(object, ...)))) else
     lsta <- t(mexprs(standards(object, ...)))
-
   clsta <- scale(lsta)
   means <- attr(clsta, "scaled:center")
   sds <- attr(clsta, "scaled:scale")
@@ -58,7 +60,7 @@ standardsFit <- function(object, factors, ncomp=NULL, lg=TRUE, fitfunc=lm, ...) 
 
   r2 <- NULL -> q2
   best <- min(np, ncomp)
-  if(is.null(ncomp)) {
+  if(is.null(ncomp) ) {
     withCallingHandlers(q2 <- Q2(pc, zbzhate, nruncv=1, ...), warning=pcaMuffle)
     r2 <- pc@R2
     best <- which.max(q2)
@@ -80,6 +82,8 @@ pcaMuffle <- function(w) if(any(grepl("Precision for components", w),
                                 grepl("Validation incomplete", w)))
   invokeRestart( "muffleWarning" )
 
+##' Predicted values for the standards
+##' 
 ##' There is often unwanted variation in among the labeled internal
 ##' standards which is related to the experimental factors due to
 ##' overlapping peaks etc. This predicts this effect given a model of
@@ -87,15 +91,15 @@ pcaMuffle <- function(w) if(any(grepl("Precision for components", w),
 ##' \eqn{\hat{X}_{IS}=X_{IS}-X_{IS}B}{XhatIS=XIS-XIS*B}
 ##' @title Predict effect for new data (or get fitted data)
 ##' @param model result from \code{standardsFit}
-##' @param newdata an \code{ExpressionSet} or \code{matrix} with new data (or the data
-##' used to fit the model to get the fitted data)
-##' @param factors the biological factors described in the pheno data slot
-##'    if \code{object} is an \code{ExpressionSet} or a design matrix if
-##'    \code{object} is a \code{matrix}.
-##' @param lg logical indicating that the data should be log transformed 
+##' @param newdata an \code{ExpressionSet} or \code{matrix} with new
+##' data (or the data used to fit the model to get the fitted data)
+##' @param factors the biological factors described in the pheno data
+##' slot if \code{object} is an \code{ExpressionSet} or a design
+##' matrix if \code{object} is a \code{matrix}.
+##' @param lg logical indicating that the data should be log
+##' transformed 
 ##' @param ... passed on to \code{standards} and \code{analytes}    
 ##' @return the corrected data
-##' @export
 ##' @seealso \code{makeX}, \code{standardsFit}
 ##' @author Henning Redestig
 ##' @examples
@@ -113,6 +117,7 @@ pcaMuffle <- function(w) if(any(grepl("Precision for components", w),
 ##'                         standards=isIS)
 ##' pred <- standardsPred(sfit, Y[,1,drop=FALSE], G[1,,drop=FALSE], standards=isIS)
 ##' cor(scores(sfit$fit$pc)[1,], scores(fullFit$fit$pc)[1,])
+##' @export
 standardsPred <- function(model, newdata, factors, lg=TRUE, ...) {
   X <- makeX(newdata, factors)
 
@@ -139,18 +144,18 @@ standardsPred <- function(model, newdata, factors, lg=TRUE, ...) {
 ##' tolerated.
 ##' @title Normalize by sample weight
 ##' @param object an \code{ExpressionSet}
-##' @param weight a string naming the pheno data column with the weight
-##' or a numeric vector with one weight value per sample.
-##' @param lg is the assay data already on the log-scale or not. If lg,
-##' the weight value is also log-transformed and subtraction is used
-##' instead of division.
-##' @export
+##' @param weight a string naming the pheno data column with the
+##' weight or a numeric vector with one weight value per sample.
+##' @param lg is the assay data already on the log-scale or not. If
+##' lg, the weight value is also log-transformed and subtraction is
+##' used instead of division.
 ##' @return the normalized expression set
-##' @author Henning Redestig
 ##' @examples
 ##' data(mix)
 ##' w <- runif(ncol(mix),1, 1.3)
 ##' weightnorm(mix, w)
+##' @author Henning Redestig
+##' @export
 weightnorm <- function(object, weight="weight", lg=FALSE) {
   assd <- exprs(object)
   if(length(weight)[1] & is.character(weight))
@@ -182,24 +187,31 @@ weightnorm <- function(object, weight="weight", lg=FALSE) {
 ##' \item{crmn}{See Redestig et al.}
 ##' }
 ##' @title Fit a normalization model
-##' @param object an \code{ExpressionSet} or a \code{matrix} (with samples as
-##'   columns) in which case the \code{standards} must be passed on via \code{...}
+##' @param object an \code{ExpressionSet} or a \code{matrix} (with
+##' samples as   columns) in which case the \code{standards} must be
+##' passed on via \code{...}
 ##' @param method chosen normalization method
 ##' @param one single internal standard to use for normalization
 ##' @param factors column names in the pheno data slot describing the
 ##' biological factors. Or a design matrix directly.
-##' @param lg logical indicating that the data should be log transformed 
-##' @param fitfunc the function that creates the model fit for normalization, must use the same interfaces as \code{lm}. 
-##' @param ... passed on to \code{standardsFit}, \code{standards}, \code{analytes}
+##' @param lg logical indicating that the data should be log
+##' transformed 
+##' @param fitfunc the function that creates the model fit for
+##' normalization, must use the same interfaces as \code{lm}. 
+##' @param formula if fitfunc has formula interface or not
+##' @param ... passed on to \code{standardsFit}, \code{standards},
+##'{analytes}
 ##' @export
 ##' @return a normalization model
 ##' @seealso \code{normPred}, \code{standards}, \code{model.matrix}
 ##' @references Sysi-Aho, M.; Katajamaa, M.; Yetukuri, L. & Oresic,
 ##' M. Normalization method for metabolomics data using optimal
-##' selection of multiple internal standards. BMC Bioinformatics, 2007, 8, 93
+##' selection of multiple internal standards. BMC Bioinformatics,
+##' 2007, 8, 93
 ##'
-##' Redestig, H.; Fukushima, A.; Stenlund, H.; Moritz, T.; Arita, M.; Saito, K. & Kusano, M.
-##' Compensation for systematic cross-contribution improves normalization of mass spectrometry
+##' Redestig, H.; Fukushima, A.; Stenlund, H.; Moritz, T.; Arita, M.;
+##' Saito, K. & Kusano, M.  Compensation for systematic
+##' cross-contribution improves normalization of mass spectrometry
 ##' based metabolomics data Anal Chem, 2009, 81, 7974-7980
 ##' @author Henning Redestig
 ##' @examples
@@ -213,7 +225,7 @@ weightnorm <- function(object, weight="weight", lg=FALSE) {
 ##' nfit <- normFit(Y, "crmn", factors=G, ncomp=3, standards=isIS)
 ##' slplot(sFit(nfit)$fit$pc, scol=as.integer(mix$runorder))
 normFit <- function(object, method, one="Succinate_d4", factors=NULL, lg=TRUE,
-                    fitfunc=lm, ...) {
+                    fitfunc=lm, formula=TRUE,...) {
   if("ccmn" %in% method) 
     method[method == "ccmn"] <- "crmn"
   if(!method %in% c("t1", "avg", "one", "nomis", "totL2", "crmn",
@@ -229,20 +241,21 @@ normFit <- function(object, method, one="Succinate_d4", factors=NULL, lg=TRUE,
   if(lg) {
     lsta <- log2(sta)
     lana <- log2(ana)
-  }
-  else {
+  } else {
     lsta <- sta
     lana <- ana
   }    
 
   wasNa <- !is.finite(lana)
-  if(any(!is.finite(lsta)) | any(!is.finite(lsta)) |
-     any(!is.finite(lana)) | any(!is.finite(lana))) {
+  if((any(!is.finite(lsta)) | any(!is.finite(lsta)) |
+      any(!is.finite(lana)) | any(!is.finite(lana))) &
+     method %in% c("t1", "nomics", "crmn") & ncol(lsta) > 1) {
     message("Found missing or negative values - applying imputation using ppca")
     lana[!is.finite(lana)] <- NA
     lsta[!is.finite(lsta)] <- NA
     lana <- completeObs(pca(lana, method="ppca"))
-    lsta <- completeObs(pca(lsta, method="ppca"))
+    if(all(dim(lsta)) > 1)
+      lsta <- completeObs(pca(lsta, method="ppca"))
   }
 
   means <- colMeans(lana)
@@ -279,7 +292,10 @@ normFit <- function(object, method, one="Succinate_d4", factors=NULL, lg=TRUE,
     }
     tz <- standardsPred(sfit, object, factors, lg=lg, ...)
     sclana <- scale(lana)
-    pfit <- fitfunc(sclana~-1+I(tz))
+    if(formula)
+      pfit <- fitfunc(sclana~-1+I(tz)) else
+    pfit <- fitfunc(y=sclana,x=tz)
+    
 
     model <-  list(fit=pfit,
                   sds=sds, means=means)
@@ -344,18 +360,20 @@ normalize <- function(object, method, segments=NULL, ...) {
 ##' Current can not only handle matrices as input for methods 'RI' and 'one'.
 ##' @title Predict for normalization
 ##' @param normObj the result from \code{normFit}
-##' @param newdata an \code{ExpressionSet} or a \code{matrix} (in which case the
-##'   \code{standards} must be passed on via \code{...}),
-##'   possibly the same as used to
-##'   fit the normalization model in order to get the fitted data.
+##' @param newdata an \code{ExpressionSet} or a \code{matrix} (in
+##' which case the \code{standards} must be passed on via
+##' \code{...}), possibly the same as used to   fit the
+##' normalization model in order to get the fitted data.
 ##' @param factors column names in the pheno data slot describing the
-##'   biological factors. Or a design matrix.
-##' @param lg logical indicating that the data should be log transformed 
+##' biological factors. Or a design matrix.
+##' @param lg logical indicating that the data should be log
+##' transformed 
+##' @param predfunc the function to use to get predicted values from
+##' the fitted object (only for crmn)
 ##' @param ... passed on to \code{standardsPred}, \code{standardsFit},
-##'   \code{standards}, \code{analytes}
+##'ode{standards}, \code{analytes}
 ##' @export
 ##' @return the normalized data
-##' @author Henning Redestig
 ##' @seealso \code{normFit}
 ##' @examples
 ##' data(mix)
@@ -369,7 +387,8 @@ normalize <- function(object, method, segments=NULL, ...) {
 ##' nfit <- normFit(Y, "crmn", factors=G, ncomp=3, standards=isIS)
 ##' normedData <- normPred(nfit, Y, G, standards=isIS)
 ##' slplot(pca(t(log2(normedData))), scol=as.integer(mix$type))
-normPred <- function(normObj, newdata, factors=NULL, lg=TRUE, ...) {
+##' @author Henning Redestig
+normPred <- function(normObj, newdata, factors=NULL, lg=TRUE, predfunc=predict,...) {
   
   sta <- t(mexprs(standards(newdata, ...)))
   ana <- t(mexprs(analytes(newdata, ...)))
@@ -418,7 +437,7 @@ normPred <- function(normObj, newdata, factors=NULL, lg=TRUE, ...) {
                scale(lana, center=model(normObj)$means, scale=model(normObj)$sds)
              ## correct
              lnormedData <-
-               lana - predict(model(normObj)$fit, data.frame(I(tz)))
+               lana - predfunc(model(normObj)$fit, data.frame(I(tz)))
              ## recenter/rescale
              lnormedData <- sweep(lnormedData, 2, model(normObj)$sds, "*")
              lnormedData <- sweep(lnormedData, 2, model(normObj)$means, "+")
@@ -442,15 +461,14 @@ normPred <- function(normObj, newdata, factors=NULL, lg=TRUE, ...) {
            },
            one = {
              # TODO this won't work with matrix
-             chosen <- grep(model(normObj)$one, fData(standards(newdata))$synonym)
-             if(length(chosen) == 0) 
+             chosen <- match(model(normObj)$one, fData(standards(newdata))$synonym)
+             if(is.na(chosen))
                stop(paste("chosen internal standard ", model(normObj)$one,
                           " not found. Choose one of ", 
                           paste(fData(standards(newdata))$synonym, collapse=", ",
                                 sep=""),
                           sep=""))
              corrFac <- sta[,chosen]
-
              if(lg)
                sweep(ana, 1, corrFac, "/")
              else
@@ -471,15 +489,18 @@ normPred <- function(normObj, newdata, factors=NULL, lg=TRUE, ...) {
              
            },
            totL2 = {
+             ana.tmp <- ana
+             ana.tmp[is.na(ana.tmp)] <- 0
+             cF <- diag(crossprod(t(ana.tmp)))
              if(lg) {
                normedData <-
                  sweep(ana, 1,
-                       sqrt(diag(crossprod(t(ana))) / ncol(ana)), "/")
+                       sqrt(cF / ncol(ana)), "/")
              }
              else {
                normedData <-
                  sweep(ana, 1,
-                       sqrt(diag(crossprod(t(ana))) / ncol(ana)), "-")
+                       sqrt(cF / ncol(ana)), "-")
              }               
              normedData
            },

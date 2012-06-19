@@ -1,13 +1,27 @@
 \name{analytes}
-\title{Accessor for the analytes}
-\usage{analytes(object, standards=NULL, ...)}
-\description{Subset an data set to only contain the analytes.}
-\value{subsetted dataset}
-\author{Henning Redestig}
 \alias{analytes}
-\arguments{\item{object}{an \code{ExpressionSet}, \code{matrix} or \code{data.frame}}
-\item{standards}{a logical vector indicating which rows are internal analytes}
-\item{...}{not used}}
-\examples{data(mix)
+\title{Accessor for the analytes}
+\arguments{
+  \item{object}{an \code{ExpressionSet}, \code{matrix} or
+  \code{data.frame}}
+
+  \item{standards}{a logical vector indicating which rows
+  are internal analytes}
+
+  \item{...}{not used}
+}
+\value{
+  subsetted dataset
+}
+\description{
+  Subset an data set to only contain the analytes.
+}
+\examples{
+data(mix)
 analytes(mix)
-analytes(exprs(mix), fData(mix)$tag == 'IS')}
+analytes(exprs(mix), fData(mix)$tag == 'IS')
+}
+\author{
+  Henning Redestig
+}
+

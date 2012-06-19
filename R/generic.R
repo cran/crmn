@@ -27,7 +27,7 @@ setMethod("model", signature(object="nFit"), function(object) object@model)
 ##' @return the method (content differs between normlization methods)
 ##' @author Henning Redestig
 ##' @aliases method method,nFit-method
-##' @importFrom pcaMethods,method
+##' @importFrom pcaMethods method
 ##' @exportMethod method
 setMethod("method", signature(object="nFit"), function(object) object@method)
 

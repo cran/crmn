@@ -1,7 +1,12 @@
-\name{nFit}
-\title{Normalization model}
-\description{Common class representation for normalization models.}
 \docType{class}
+\name{nFit}
 \alias{nFit}
 \alias{nFit-class}
-\author{Henning Redestig}
+\title{Normalization model}
+\description{
+  Common class representation for normalization models.
+}
+\author{
+  Henning Redestig
+}
+

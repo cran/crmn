@@ -26,18 +26,26 @@ show_nfit <- function(object) {
 }
 
 ##' Simple plot function for a CRMN normalization model.
-##' Shows Tz and the optimization (if computed) of the PCA model.
-##'
+##' 
+##' Shows Tz and the optimization (if computed) of the PCA model. The
+##' number of components used for normalization should not exceed the
+##' maximum indicated by Q2. The structure shown in the Tz plot
+##' indicate the analytical variance which is exactly independent of
+##' the experimental design. The corresponding loading plot shows how
+##' this structure is capture by the used ISs.
 ##' @title Plot a statistics for CRMN normalization model
 ##' @param x an \code{nFit} object
 ##' @param y not used
 ##' @param ... passed on to the scatter plot calls
 ##' @return nothing
+##' @seealso \code{slplot}
 ##' @examples
 ##' data(mix)
 ##' nfit <- normFit(mix, "crmn", factors="type", ncomp=2)
 ##' plot(nfit)
 ##' @export
+##' @method plot nFit
+##' @aliases plot.nFit plot,nFit-method
 ##' @author Henning Redestig
 plot.nFit <- function(x, y=NULL,...) {
   if(!method(x) == "crmn")
@@ -53,14 +61,13 @@ plot.nFit <- function(x, y=NULL,...) {
     legend(x="topleft", fill=c("white", "grey"),
            legend=c(expression(R^2),
              expression(Q^2)))
-                                                   
   }
   else
     par(mfrow=c(1,2))    
   plot(scores(pcMod)[,1:2], xlab=expression(T[z1]), ylab=expression(T[z2]),...)
   plot(loadings(pcMod)[,1:2], xlab=expression(P[z1]), ylab=expression(P[z2]),...)
-
 }
+setMethod("plot", "nFit", plot.nFit)
 
 ##' Subset an data set to only contain the labeled internal standards.
 ##'
@@ -78,7 +85,7 @@ plot.nFit <- function(x, y=NULL,...) {
 ##' fData(mix)$test <- fData(mix)$tag
 ##' standards(mix, where="test")
 ##' @author Henning Redestig
-standards_eset <- function(object, where="tag", what="IS",...) {
+standards_eset <- function(object, where="tag", what="IS", ...) {
   if(is.null(fData(object)[,where]))
     stop(paste("No column named", where, "in the feature data"))
   if(all(!fData(object)[,where] %in% what))
